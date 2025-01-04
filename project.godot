@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Burn'o'Priest 2025"
-run/main_scene="res://main.tscn"
+run/main_scene="res://root.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[debug]
+
+gdscript/warnings/integer_division=0
 
 [display]
 
@@ -28,5 +32,6 @@ window/stretch/mode="viewport"
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 viewport/hdr_2d=true
 2d/snap/snap_2d_transforms_to_pixel=true
