@@ -21,6 +21,10 @@ func init_playlist(source: Array[AudioStream]) -> Array[int]:
 
 
 func _ready() -> void:
+    priest.shuffle()
+    devil.shuffle()
+    music.shuffle()
+
     priest_playlist = init_playlist(priest)
     devil_playlist = init_playlist(devil)
     music_playlist = init_playlist(music)

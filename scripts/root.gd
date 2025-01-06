@@ -112,9 +112,19 @@ func _on_control_mouse_entered() -> void:
 
 func _on_priest_burn_update(event: String, parent: Priest) -> void:
     if event == 'start':
-        print('parent start burning ', parent)
         var burning_priest = burning_priest_scene.instantiate()
         burning_priest._on_burn_update('update', parent)
         parent.disconnect('burn_update', _on_priest_burn_update)
         parent.connect('burn_update', burning_priest._on_burn_update)
         $HeatViewport.add_child(burning_priest)
+
+
+func _on_devil_click(position: Vector2) -> void:
+    for priest in $Priests.get_children():
+        if priest is Priest:
+            if priest.burning:
+                continue
+
+            if priest.global_position.distance_to(position) < 16:
+                priest.start_burning()
+                break

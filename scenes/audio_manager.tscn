@@ -18,5 +18,4 @@ volume_db = -20.0
 script = ExtResource("1_u0gdb")
 priest = Array[AudioStream]([ExtResource("2_ahb5y"), ExtResource("3_4noqc"), ExtResource("4_73wc2"), ExtResource("5_a6w7b"), ExtResource("6_6d5qm"), ExtResource("7_5asw4"), ExtResource("8_qyao1")])
 devil = Array[AudioStream]([ExtResource("9_4wmsy"), ExtResource("10_s4pao")])
-gameover = null
 music = Array[AudioStream]([ExtResource("11_bjj5e"), ExtResource("12_ocgbj")])

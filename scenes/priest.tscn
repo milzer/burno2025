@@ -1,12 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://bwaff6symbljx"]
+[gd_scene load_steps=4 format=3 uid="uid://bwaff6symbljx"]
 
 [ext_resource type="SpriteFrames" uid="uid://cin8m7s33hry0" path="res://resources/sprites.tres" id="1_t7uxa"]
 [ext_resource type="Script" path="res://scripts/priest.gd" id="2_2ro76"]
 
-[node name="Priest" type="AnimatedSprite2D"]
-position = Vector2(158, 134)
-sprite_frames = ExtResource("1_t7uxa")
-animation = &"priest_walk"
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1ts3m"]
+radius = 6.0
+height = 22.0
+
+[node name="Priest" type="Area2D"]
+collision_layer = 2
 script = ExtResource("2_2ro76")
 
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_t7uxa")
+animation = &"priest_walk"
+
 [node name="AudioPlayer" type="AudioStreamPlayer2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("CapsuleShape2D_1ts3m")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

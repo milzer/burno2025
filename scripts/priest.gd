@@ -1,5 +1,5 @@
 class_name Priest
-extends AnimatedSprite2D
+extends Area2D
 
 
 const DEVIL_POSITION = Vector2(160, 200 - 16)
@@ -21,17 +21,17 @@ func _ready() -> void:
     target = random_target()
     last_distance_to_devil = DEVIL_POSITION.distance_to(target)
     speed = randi_range(10, 50)
-    play('priest_walk')
-
-    await get_tree().create_timer(randf_range(2, 5)).timeout
-    start_burning()
+    $Sprite.play('priest_walk')
 
 
 func start_burning() -> void:
+    if burning:
+        return
+
     burning = true
     target = global_position
     burn_update.emit('start', self)
-    play('priest_burn')
+    $Sprite.play('priest_burn')
 
     var audio_stream = AudioManager.get_priest_stream()
     assert(audio_stream, 'Failed to get priest stream')
@@ -67,3 +67,20 @@ func _on_audio_finished() -> void:
     await get_tree().create_timer(randf_range(0.1, 0.3)).timeout
     burn_update.emit('kill', self)
     queue_free()
+
+
+func _on_area_entered(area: Area2D) -> void:
+    if burning:
+        return
+
+    if area is Devil:
+        queue_free()
+        area.damage()
+
+
+func get_animation() -> String:
+    return $Sprite.animation
+
+
+func get_frame() -> int:
+    return $Sprite.frame

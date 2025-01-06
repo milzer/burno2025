@@ -2,7 +2,7 @@ extends Node2D
 
 const BASE_ALPHA = 0.2
 
-var size: float = 16.0
+var size: float = 12.0
 var color: Color = Color(1.0, 1.0, 1.0, BASE_ALPHA)
 var angle: float = 0.0
 var points: Array[Vector2]
