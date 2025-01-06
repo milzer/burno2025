@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bwaff6symbljx"]
+
+[ext_resource type="SpriteFrames" uid="uid://cin8m7s33hry0" path="res://resources/sprites.tres" id="1_t7uxa"]
+[ext_resource type="Script" path="res://scripts/priest.gd" id="2_2ro76"]
+
+[node name="Priest" type="AnimatedSprite2D"]
+position = Vector2(158, 134)
+sprite_frames = ExtResource("1_t7uxa")
+animation = &"priest_walk"
+script = ExtResource("2_2ro76")

@@ -1,0 +1,59 @@
+[gd_scene load_steps=5 format=3 uid="uid://d0nlv80a0worv"]
+
+[ext_resource type="Script" path="res://scripts/root.gd" id="1_k08jv"]
+[ext_resource type="Script" path="res://scripts/pentagram.gd" id="4_m1vlj"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_veuyc"]
+viewport_path = NodePath("HeatViewport")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_t2h3j"]
+blend_mode = 1
+light_mode = 1
+
+[node name="Root" type="Node"]
+script = ExtResource("1_k08jv")
+fire_decay = 2
+
+[node name="HeatViewport" type="SubViewport" parent="."]
+disable_3d = true
+size = Vector2i(320, 200)
+render_target_update_mode = 4
+
+[node name="Pentagram" type="Node2D" parent="HeatViewport"]
+process_mode = 3
+script = ExtResource("4_m1vlj")
+
+[node name="HeatVisualiser" type="TextureRect" parent="."]
+visible = false
+offset_right = 320.0
+offset_bottom = 200.0
+texture = SubResource("ViewportTexture_veuyc")
+
+[node name="Priests" type="Node" parent="."]
+
+[node name="FireRect" type="TextureRect" parent="."]
+material = SubResource("CanvasItemMaterial_t2h3j")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FPS" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "0"
+
+[node name="Menu" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="Menu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="mouse_moved" from="." to="HeatViewport/Pentagram" method="_on_root_mouse_moved"]
+[connection signal="mouse_entered" from="Menu/Control" to="." method="_on_control_mouse_entered"]
+[connection signal="mouse_exited" from="Menu/Control" to="." method="_on_control_mouse_exited"]

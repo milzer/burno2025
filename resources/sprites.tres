@@ -1,0 +1,101 @@
+[gd_resource type="SpriteFrames" load_steps=12 format=3 uid="uid://cin8m7s33hry0"]
+
+[ext_resource type="Texture2D" uid="uid://cynyq53dtq28t" path="res://assets/sprites.png" id="1_ndmir"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_063qg"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aomt8"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6xbbh"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kmdyg"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pg4ic"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jn0bc"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3a7rv"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gbdf5"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_18yiu"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7n6m5"]
+atlas = ExtResource("1_ndmir")
+region = Rect2(32, 0, 32, 32)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_063qg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aomt8")
+}],
+"loop": true,
+"name": &"devil_left",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xbbh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kmdyg")
+}],
+"loop": true,
+"name": &"devil_right",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pg4ic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jn0bc")
+}],
+"loop": true,
+"name": &"devil_up",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3a7rv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gbdf5")
+}],
+"loop": true,
+"name": &"priest_burn",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_18yiu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7n6m5")
+}],
+"loop": true,
+"name": &"priest_walk",
+"speed": 3.0
+}]

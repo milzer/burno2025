@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3 uid="uid://b62s7pv73hk3f"]
+
+[ext_resource type="Shader" path="res://shaders/burning_sprite.gdshader" id="1_nhrku"]
+[ext_resource type="SpriteFrames" uid="uid://cin8m7s33hry0" path="res://resources/sprites.tres" id="2_n082d"]
+[ext_resource type="Script" path="res://scripts/burning_priest.gd" id="3_t2tbw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7yfaf"]
+shader = ExtResource("1_nhrku")
+
+[node name="BurningPriest" type="AnimatedSprite2D"]
+material = SubResource("ShaderMaterial_7yfaf")
+position = Vector2(63, 54)
+sprite_frames = ExtResource("2_n082d")
+animation = &"priest_walk"
+script = ExtResource("3_t2tbw")
