@@ -1,0 +1,22 @@
+[gd_scene load_steps=13 format=3 uid="uid://q065ohcipn5t"]
+
+[ext_resource type="Script" path="res://scripts/audio_manager.gd" id="1_u0gdb"]
+[ext_resource type="AudioStream" uid="uid://h1l7t0uj2vbd" path="res://assets/priest1.ogg" id="2_ahb5y"]
+[ext_resource type="AudioStream" uid="uid://b746hsu8dxg48" path="res://assets/priest2.ogg" id="3_4noqc"]
+[ext_resource type="AudioStream" uid="uid://bywgmwhhb6bsa" path="res://assets/priest3.ogg" id="4_73wc2"]
+[ext_resource type="AudioStream" uid="uid://b32hixtcsimml" path="res://assets/priest4.ogg" id="5_a6w7b"]
+[ext_resource type="AudioStream" uid="uid://v42o3j3x74h0" path="res://assets/priest7.ogg" id="6_6d5qm"]
+[ext_resource type="AudioStream" uid="uid://ds2u5gjvrhoga" path="res://assets/priest8.ogg" id="7_5asw4"]
+[ext_resource type="AudioStream" uid="uid://dh1snhfwpe63k" path="res://assets/priest9.ogg" id="8_qyao1"]
+[ext_resource type="AudioStream" uid="uid://du2djgllvyqsb" path="res://assets/devil1.ogg" id="9_4wmsy"]
+[ext_resource type="AudioStream" uid="uid://bwpjvcvvjvjp3" path="res://assets/devil2.ogg" id="10_s4pao"]
+[ext_resource type="AudioStream" uid="uid://dugmg3ru8868m" path="res://assets/music1.ogg" id="11_bjj5e"]
+[ext_resource type="AudioStream" uid="uid://8hkkx384g36l" path="res://assets/music2.ogg" id="12_ocgbj"]
+
+[node name="AudioManager" type="AudioStreamPlayer"]
+volume_db = -20.0
+script = ExtResource("1_u0gdb")
+priest = Array[AudioStream]([ExtResource("2_ahb5y"), ExtResource("3_4noqc"), ExtResource("4_73wc2"), ExtResource("5_a6w7b"), ExtResource("6_6d5qm"), ExtResource("7_5asw4"), ExtResource("8_qyao1")])
+devil = Array[AudioStream]([ExtResource("9_4wmsy"), ExtResource("10_s4pao")])
+gameover = null
+music = Array[AudioStream]([ExtResource("11_bjj5e"), ExtResource("12_ocgbj")])

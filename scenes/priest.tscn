@@ -8,3 +8,5 @@ position = Vector2(158, 134)
 sprite_frames = ExtResource("1_t7uxa")
 animation = &"priest_walk"
 script = ExtResource("2_2ro76")
+
+[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="."]

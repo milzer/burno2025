@@ -114,8 +114,7 @@ func _on_priest_burn_update(event: String, parent: Priest) -> void:
     if event == 'start':
         print('parent start burning ', parent)
         var burning_priest = burning_priest_scene.instantiate()
-        burning_priest.global_position = parent.global_position
-        burning_priest.frame = parent.frame
-        parent.connect('burn_update', burning_priest._on_burn_update)
+        burning_priest._on_burn_update('update', parent)
         parent.disconnect('burn_update', _on_priest_burn_update)
+        parent.connect('burn_update', burning_priest._on_burn_update)
         $HeatViewport.add_child(burning_priest)

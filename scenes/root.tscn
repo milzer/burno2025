@@ -12,7 +12,7 @@ light_mode = 1
 
 [node name="Root" type="Node"]
 script = ExtResource("1_k08jv")
-fire_decay = 2
+fire_decay = 3
 
 [node name="HeatViewport" type="SubViewport" parent="."]
 disable_3d = true
