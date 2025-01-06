@@ -54,7 +54,7 @@ func _process(delta: float) -> void:
             target.y = clamp(target.y, 16, 200 - 16)
             speed = randi_range(30, 60)
         else:
-            var v = Vector2(cos(a), -abs(sin(a))) * randf_range(last_distance_to_devil * 0.5, last_distance_to_devil * 0.9)
+            var v = Vector2(cos(a), -abs(sin(a))) * randf_range(last_distance_to_devil * 0.3, last_distance_to_devil * 0.7)
             target = DEVIL_POSITION + v
             last_distance_to_devil = DEVIL_POSITION.distance_to(target)
             speed = randi_range(10, 50)

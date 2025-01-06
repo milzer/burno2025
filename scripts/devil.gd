@@ -8,6 +8,7 @@ var health: int = 3
 
 
 signal devil_click(position: Vector2)
+signal death()
 signal game_over()
 
 
@@ -37,7 +38,23 @@ func _input(event: InputEvent) -> void:
 
 
 func damage() -> void:
+    if not visible:
+        return
+
     health -= 1
     if health <= 0:
-        game_over.emit()
         visible = false
+        $AudioPlayer.stream = AudioManager.gameover
+        $AudioPlayer.pitch_scale = randf_range(0.9, 1.1)
+        $AudioPlayer.connect('finished', _on_audio_finished)
+        $AudioPlayer.play()
+        death.emit()
+    else:
+        $AudioPlayer.stream = AudioManager.get_devil_stream()
+        $AudioPlayer.pitch_scale = randf_range(0.8, 1.2)
+        $AudioPlayer.volume_db = randf_range(-5, 0)
+        $AudioPlayer.play()
+
+
+func _on_audio_finished() -> void:
+    game_over.emit()

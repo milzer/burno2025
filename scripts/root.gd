@@ -21,7 +21,10 @@ var spawn_path = [
 @onready var priest_scene = preload('res://scenes/priest.tscn')
 @onready var burning_priest_scene = preload('res://scenes/burning_priest.tscn')
 
-@export var fire_decay: int = 1
+@export var fire_decay: int = 4
+@export var initial_spawn_interval: float = 3.0
+
+var spawn_interval: float
 
 signal mouse_moved(x: int, y: int)
 
@@ -46,9 +49,13 @@ func _ready() -> void:
             palette[i + 128] = Color8(255, i * 4, 0, 255)
             palette[i + 192] = Color8(255, 255, i * 4, 255)
 
-    for i in range(20):
-        spawn_priest()
-        await get_tree().create_timer(0.5).timeout
+    start_game()
+
+
+func start_game() -> void:
+    spawn_interval = initial_spawn_interval
+
+    spawn_priest()
 
 
 func spawn_priest() -> void:
@@ -59,6 +66,13 @@ func spawn_priest() -> void:
     priest.global_position = spawn_path[i].lerp(spawn_path[i + 1], randf())
 
     $Priests.add_child(priest)
+
+    spawn_interval *= 0.99
+    $SpawnTimer.wait_time = spawn_interval
+    $SpawnTimer.one_shot = true
+    $SpawnTimer.connect('timeout', spawn_priest, CONNECT_ONE_SHOT)
+    $SpawnTimer.start()
+    print('spawned priest ', $SpawnTimer.wait_time)
 
 
 func _input(event: InputEvent) -> void:
@@ -128,3 +142,14 @@ func _on_devil_click(position: Vector2) -> void:
             if priest.global_position.distance_to(position) < 16:
                 priest.start_burning()
                 break
+
+func _on_start_pressed() -> void:
+    pass
+
+
+func _on_devil_death() -> void:
+    pass
+
+
+func _on_game_over() -> void:
+    pass

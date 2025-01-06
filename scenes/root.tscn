@@ -1,9 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://d0nlv80a0worv"]
+[gd_scene load_steps=9 format=3 uid="uid://d0nlv80a0worv"]
 
 [ext_resource type="Script" path="res://scripts/root.gd" id="1_k08jv"]
+[ext_resource type="Texture2D" uid="uid://cynyq53dtq28t" path="res://assets/sprites.png" id="3_8fyg6"]
 [ext_resource type="Script" path="res://scripts/devil.gd" id="3_hdjet"]
 [ext_resource type="Script" path="res://scripts/pentagram.gd" id="4_m1vlj"]
 [ext_resource type="SpriteFrames" uid="uid://cin8m7s33hry0" path="res://resources/sprites.tres" id="5_g4i4k"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_41vbc"]
+atlas = ExtResource("3_8fyg6")
+region = Rect2(320, 0, 32, 32)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8885p"]
 radius = 7.0
@@ -16,6 +21,9 @@ light_mode = 1
 [node name="Root" type="Node"]
 script = ExtResource("1_k08jv")
 fire_decay = 3
+initial_spawn_interval = null
+
+[node name="SpawnTimer" type="Timer" parent="."]
 
 [node name="HeatViewport" type="SubViewport" parent="."]
 disable_3d = true
@@ -25,6 +33,11 @@ render_target_update_mode = 4
 [node name="Pentagram" type="Node2D" parent="HeatViewport"]
 process_mode = 3
 script = ExtResource("4_m1vlj")
+
+[node name="DeathSprite" type="Sprite2D" parent="HeatViewport"]
+visible = false
+position = Vector2(160, 192)
+texture = SubResource("AtlasTexture_41vbc")
 
 [node name="Priests" type="Node" parent="."]
 
@@ -41,6 +54,8 @@ animation = &"devil_up"
 position = Vector2(0, 1)
 shape = SubResource("CapsuleShape2D_8885p")
 
+[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="Devil"]
+
 [node name="FireRect" type="TextureRect" parent="."]
 material = SubResource("CanvasItemMaterial_t2h3j")
 anchors_preset = 15
@@ -55,9 +70,10 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "0"
 
-[node name="Menu" type="CanvasLayer" parent="."]
+[node name="GUI" type="CanvasLayer" parent="."]
+visible = false
 
-[node name="Control" type="Control" parent="Menu"]
+[node name="MainMenu" type="Control" parent="GUI"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -65,7 +81,32 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="CenterContainer" type="CenterContainer" parent="GUI/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/MainMenu/CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GUI/MainMenu/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Burn'o'Priest 2025"
+
+[node name="HSeparator" type="HSeparator" parent="GUI/MainMenu/CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Start" type="Button" parent="GUI/MainMenu/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start"
+
+[node name="Quit" type="Button" parent="GUI/MainMenu/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit"
+
 [connection signal="mouse_moved" from="." to="HeatViewport/Pentagram" method="_on_root_mouse_moved"]
 [connection signal="devil_click" from="Devil" to="." method="_on_devil_click"]
-[connection signal="mouse_entered" from="Menu/Control" to="." method="_on_control_mouse_entered"]
-[connection signal="mouse_exited" from="Menu/Control" to="." method="_on_control_mouse_exited"]
+[connection signal="pressed" from="GUI/MainMenu/CenterContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]

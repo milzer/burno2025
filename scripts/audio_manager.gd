@@ -3,7 +3,7 @@ extends AudioStreamPlayer
 
 @export var priest: Array[AudioStream] = []
 @export var devil: Array[AudioStream] = []
-@export var gameover: Array[AudioStream] = []
+@export var gameover: AudioStream
 @export var music: Array[AudioStream] = []
 
 var priest_playlist: Array[int]
