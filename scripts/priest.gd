@@ -24,7 +24,10 @@ func _ready() -> void:
     $Sprite.play('priest_walk')
 
 
-func start_burning() -> void:
+func start_burning(no_sound: bool = false) -> void:
+    if has_signal('area_enterad'):
+        disconnect('area_entered', _on_area_entered)
+
     if burning:
         return
 
@@ -33,6 +36,9 @@ func start_burning() -> void:
     burn_update.emit('start', self)
     $Sprite.play('priest_burn')
 
+    if no_sound:
+        return
+
     var audio_stream = AudioManager.get_priest_stream()
     assert(audio_stream, 'Failed to get priest stream')
     $AudioPlayer.stream = audio_stream
@@ -40,6 +46,14 @@ func start_burning() -> void:
     $AudioPlayer.volume_db = randf_range(-5, 0)
     $AudioPlayer.connect('finished', _on_audio_finished)
     $AudioPlayer.play()
+
+
+func kill_by_devil() -> void:
+    start_burning(true)
+    visible = false
+    await get_tree().create_timer(0.2).timeout
+    burn_update.emit('kill', self)
+    queue_free()
 
 
 func _process(delta: float) -> void:
@@ -70,11 +84,9 @@ func _on_audio_finished() -> void:
 
 
 func _on_area_entered(area: Area2D) -> void:
-    if burning:
-        return
-
-    if area is Devil:
-        queue_free()
+    if area is Devil and area.visible:
+        disconnect('area_entered', _on_area_entered)
+        kill_by_devil()
         area.damage()
 
 

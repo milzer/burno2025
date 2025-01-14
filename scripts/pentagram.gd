@@ -7,6 +7,8 @@ var color: Color = Color(1.0, 1.0, 1.0, BASE_ALPHA)
 var angle: float = 0.0
 var points: Array[Vector2]
 var last_position: Vector2
+var flash_amount: float = 0.0
+
 
 func _ready() -> void:
     for i in range(5):
@@ -16,8 +18,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     var movement = last_position - global_position
     last_position = global_position
-    color.a = min(BASE_ALPHA + movement.length() / 15.0, 1.0)
+    color.a = min(BASE_ALPHA + flash_amount + (movement.length() / 15.0), 1.0)
     rotation += delta
+    flash_amount = move_toward(flash_amount, 0.0, delta * 2)
     queue_redraw()
 
 
@@ -29,3 +32,7 @@ func _draw() -> void:
 func _on_root_mouse_moved(x: int, y: int) -> void:
     global_position = Vector2(x, y)
     queue_redraw()
+
+
+func flash() -> void:
+    flash_amount = 1.0

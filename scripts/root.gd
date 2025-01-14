@@ -1,5 +1,6 @@
 extends Node
 
+
 const WIDTH = 320
 const HEIGHT = 200
 
@@ -27,6 +28,7 @@ var spawn_path = [
 var spawn_interval: float
 
 signal mouse_moved(x: int, y: int)
+
 
 func _ready() -> void:
     await RenderingServer.frame_post_draw
@@ -134,6 +136,8 @@ func _on_priest_burn_update(event: String, parent: Priest) -> void:
 
 
 func _on_devil_click(position: Vector2) -> void:
+    $HeatViewport/Pentagram.flash()
+
     for priest in $Priests.get_children():
         if priest is Priest:
             if priest.burning:
@@ -142,6 +146,7 @@ func _on_devil_click(position: Vector2) -> void:
             if priest.global_position.distance_to(position) < 16:
                 priest.start_burning()
                 break
+
 
 func _on_start_pressed() -> void:
     pass

@@ -15,8 +15,10 @@ func init_playlist(source: Array[AudioStream]) -> Array[int]:
     var playlist: Array[int] = []
     for i in range(source.size()):
         playlist.append(i)
+
     if playlist.size() > 2:
         playlist.shuffle()
+
     return playlist
 
 
@@ -48,7 +50,7 @@ func get_priest_stream() -> AudioStream:
 
 
 func get_devil_stream() -> AudioStream:
-    return get_from_playlist(priest_playlist, priest)
+    return get_from_playlist(devil_playlist, devil)
 
 
 func _on_music_finished() -> void:

@@ -21,7 +21,6 @@ light_mode = 1
 [node name="Root" type="Node"]
 script = ExtResource("1_k08jv")
 fire_decay = 3
-initial_spawn_interval = null
 
 [node name="SpawnTimer" type="Timer" parent="."]
 
