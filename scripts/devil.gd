@@ -31,8 +31,9 @@ func _process(delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
-    if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+    if event is InputEventMouseButton:
         if click_timer <= 0.0:
+            print('devil input ', event)
             click_timer = cooldown
             devil_click.emit(get_global_mouse_position())
 

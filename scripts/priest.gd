@@ -2,7 +2,7 @@ class_name Priest
 extends Area2D
 
 
-const DEVIL_POSITION = Vector2(160, 200 - 16)
+const DEVIL_POSITION = Vector2(Game.WIDTH / 2, Game.HEIGHT - 16)
 
 var target: Vector2
 var speed: int = 100
@@ -14,7 +14,7 @@ signal burn_update(event: String, priest: Priest)
 
 
 func random_target() -> Vector2:
-    return Vector2(randi_range(16, 320 - 16), randi_range(16, 200 - 16))
+    return Vector2(randi_range(16, Game.WIDTH - 16), randi_range(16, Game.HEIGHT - 16))
 
 
 func _ready() -> void:
@@ -64,8 +64,8 @@ func _process(delta: float) -> void:
         var a = randf() * PI * 2
         if burning:
             target = global_position + Vector2(cos(a), sin(a)) * randf_range(5, 20)
-            target.x = clamp(target.x, 16, 320 - 16)
-            target.y = clamp(target.y, 16, 200 - 16)
+            target.x = clamp(target.x, 16, Game.WIDTH - 16)
+            target.y = clamp(target.y, 16, Game.HEIGHT - 16)
             speed = randi_range(30, 60)
         else:
             var v = Vector2(cos(a), -abs(sin(a))) * randf_range(last_distance_to_devil * 0.3, last_distance_to_devil * 0.7)

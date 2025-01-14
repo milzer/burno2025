@@ -1,160 +1,54 @@
+class_name Root
 extends Node
 
+@onready var game_scene: PackedScene = preload('res://scenes/game.tscn')
 
-const WIDTH = 320
-const HEIGHT = 200
+enum State {MAIN_MENU, IN_GAME, PAUSE_MENU}
 
-var heat_tex: Texture2D
-var heat_image: Image
+var _state: State = State.MAIN_MENU:
+    set = set_state
 
-var fire_tex: Texture2D
-var fire_buffer: PackedByteArray
-var fire_image: Image
-var fire_texture: ImageTexture
-var palette: Array[Color] = []
-var spawn_path = [
-    Vector2(-32, HEIGHT - 32),
-    Vector2(-32, -64),
-    Vector2(WIDTH + 32, -32),
-    Vector2(WIDTH + 32, HEIGHT - 64)
-]
-
-@onready var priest_scene = preload('res://scenes/priest.tscn')
-@onready var burning_priest_scene = preload('res://scenes/burning_priest.tscn')
-
-@export var fire_decay: int = 4
-@export var initial_spawn_interval: float = 3.0
-
-var spawn_interval: float
-
-signal mouse_moved(x: int, y: int)
+var _game: Game = null
 
 
 func _ready() -> void:
-    await RenderingServer.frame_post_draw
+    $GUI/MainMenu/CenterContainer/VBoxContainer/Start.connect('pressed', on_start)
+    $GUI/MainMenu/CenterContainer/VBoxContainer/Quit.connect('pressed', on_quit)
 
-    heat_tex = $HeatViewport.get_texture() as Texture2D
-    assert(heat_tex, 'Failed to get heat texture')
-
-    fire_image = Image.create(WIDTH, HEIGHT, false, Image.FORMAT_RGBA8)
-    fire_texture = ImageTexture.create_from_image(fire_image)
-    $FireRect.texture = fire_texture
-    assert($FireRect.texture)
-
-    fire_buffer.resize(WIDTH * HEIGHT)
-    fire_buffer.fill(0)
-
-    palette.resize(256)
-    for i in range(128):
-        palette[i] = Color8(i * 2, 0, 0, 255)
-        if i < 64:
-            palette[i + 128] = Color8(255, i * 4, 0, 255)
-            palette[i + 192] = Color8(255, 255, i * 4, 255)
-
-    start_game()
-
-
-func start_game() -> void:
-    spawn_interval = initial_spawn_interval
-
-    spawn_priest()
-
-
-func spawn_priest() -> void:
-    var priest = priest_scene.instantiate()
-    priest.connect('burn_update', _on_priest_burn_update)
-
-    var i = randi_range(0, 2)
-    priest.global_position = spawn_path[i].lerp(spawn_path[i + 1], randf())
-
-    $Priests.add_child(priest)
-
-    spawn_interval *= 0.99
-    $SpawnTimer.wait_time = spawn_interval
-    $SpawnTimer.one_shot = true
-    $SpawnTimer.connect('timeout', spawn_priest, CONNECT_ONE_SHOT)
-    $SpawnTimer.start()
-    print('spawned priest ', $SpawnTimer.wait_time)
+    $GUI/PauseMenu/CenterContainer/VBoxContainer/Resume.connect('pressed', on_resume)
+    $GUI/PauseMenu/CenterContainer/VBoxContainer/Quit.connect('pressed', on_quit_to_menu)
 
 
 func _input(event: InputEvent) -> void:
-    if event is InputEventMouseMotion:
-        mouse_moved.emit(event.position.x, event.position.y)
+    if event.is_action('ui_cancel'):
+        if _game:
+            get_tree().paused = true
+            $GUI/PauseMenu.show()
 
 
-func _process(_delta: float) -> void:
-    await RenderingServer.frame_post_draw
-    heat_image = heat_tex.get_image()
-    assert(heat_image, 'Failed to get heat image')
-    assert(heat_image.get_size() == Vector2i(WIDTH, HEIGHT), 'Heat image size mismatch')
-
-    var heat_data = heat_image.get_data()
-
-    var pixel_index: int
-    var intensity: int
-
-    # bottom row always burns
-    for x in range(1, WIDTH - 2):
-        fire_buffer[199 * WIDTH + x] = randi_range(0, 256)
-
-    for y in range(HEIGHT - 1):
-        for x in range(1, WIDTH - 2):
-            pixel_index = (y * WIDTH) + x
-            intensity = (
-                min(
-                    fire_buffer[pixel_index]
-                    + heat_data[pixel_index * 4] / 2,
-                    255
-                )
-                + fire_buffer[pixel_index + WIDTH + randi_range(-1, 1)]
-            )
-            intensity = max(intensity / 2 - fire_decay, 0)
-
-            fire_buffer[pixel_index] = intensity
-            fire_image.set_pixel(x, y, palette[intensity])
-
-    fire_texture.update(fire_image)
-
-    $FPS.text = str(Engine.get_frames_per_second())
+func on_start() -> void:
+    $GUI/MainMenu.hide()
+    _game = game_scene.instantiate()
+    add_child(_game)
+    move_child(_game, 0)
 
 
-func _on_control_mouse_exited() -> void:
-    Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+func on_quit() -> void:
+    get_tree().quit()
 
 
-func _on_control_mouse_entered() -> void:
-    Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+func on_resume() -> void:
+    $GUI/PauseMenu.hide()
+    get_tree().paused = false
 
 
-func _on_priest_burn_update(event: String, parent: Priest) -> void:
-    if event == 'start':
-        var burning_priest = burning_priest_scene.instantiate()
-        burning_priest._on_burn_update('update', parent)
-        parent.disconnect('burn_update', _on_priest_burn_update)
-        parent.connect('burn_update', burning_priest._on_burn_update)
-        $HeatViewport.add_child(burning_priest)
+func on_quit_to_menu() -> void:
+    get_tree().paused = false
+    _game.queue_free()
+    _game = null
+    $GUI/PauseMenu.hide()
+    $GUI/MainMenu.show()
 
 
-func _on_devil_click(position: Vector2) -> void:
-    $HeatViewport/Pentagram.flash()
-
-    for priest in $Priests.get_children():
-        if priest is Priest:
-            if priest.burning:
-                continue
-
-            if priest.global_position.distance_to(position) < 16:
-                priest.start_burning()
-                break
-
-
-func _on_start_pressed() -> void:
-    pass
-
-
-func _on_devil_death() -> void:
-    pass
-
-
-func _on_game_over() -> void:
-    pass
+func set_state(state: State) -> void:
+    _state = state

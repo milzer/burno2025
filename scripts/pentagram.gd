@@ -29,9 +29,13 @@ func _draw() -> void:
     draw_polyline([points[0], points[2], points[4], points[1], points[3], points[0]], color, 0.5, true)
 
 
-func _on_root_mouse_moved(x: int, y: int) -> void:
-    global_position = Vector2(x, y)
-    queue_redraw()
+#func _input(event: InputEvent) -> void:
+#    if event is InputEventMouse:
+
+
+#func set_global_position(pos: Vector2) -> void:
+#    global_position = pos
+#    queue_redraw()
 
 
 func flash() -> void:

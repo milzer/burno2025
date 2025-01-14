@@ -1,76 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://d0nlv80a0worv"]
+[gd_scene load_steps=2 format=3 uid="uid://d0nlv80a0worv"]
 
 [ext_resource type="Script" path="res://scripts/root.gd" id="1_k08jv"]
-[ext_resource type="Texture2D" uid="uid://cynyq53dtq28t" path="res://assets/sprites.png" id="3_8fyg6"]
-[ext_resource type="Script" path="res://scripts/devil.gd" id="3_hdjet"]
-[ext_resource type="Script" path="res://scripts/pentagram.gd" id="4_m1vlj"]
-[ext_resource type="SpriteFrames" uid="uid://cin8m7s33hry0" path="res://resources/sprites.tres" id="5_g4i4k"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_41vbc"]
-atlas = ExtResource("3_8fyg6")
-region = Rect2(320, 0, 32, 32)
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8885p"]
-radius = 7.0
-height = 20.0
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_t2h3j"]
-blend_mode = 1
-light_mode = 1
 
 [node name="Root" type="Node"]
-script = ExtResource("1_k08jv")
-fire_decay = 3
-
-[node name="SpawnTimer" type="Timer" parent="."]
-
-[node name="HeatViewport" type="SubViewport" parent="."]
-disable_3d = true
-size = Vector2i(320, 200)
-render_target_update_mode = 4
-
-[node name="Pentagram" type="Node2D" parent="HeatViewport"]
 process_mode = 3
-script = ExtResource("4_m1vlj")
-
-[node name="DeathSprite" type="Sprite2D" parent="HeatViewport"]
-visible = false
-position = Vector2(160, 192)
-texture = SubResource("AtlasTexture_41vbc")
-
-[node name="Priests" type="Node" parent="."]
-
-[node name="Devil" type="Area2D" parent="."]
-position = Vector2(160, 184)
-collision_mask = 2
-script = ExtResource("3_hdjet")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Devil"]
-sprite_frames = ExtResource("5_g4i4k")
-animation = &"devil_up"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Devil"]
-position = Vector2(0, 1)
-shape = SubResource("CapsuleShape2D_8885p")
-
-[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="Devil"]
-
-[node name="FireRect" type="TextureRect" parent="."]
-material = SubResource("CanvasItemMaterial_t2h3j")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="FPS" type="Label" parent="."]
-visible = false
-offset_right = 40.0
-offset_bottom = 23.0
-text = "0"
+script = ExtResource("1_k08jv")
 
 [node name="GUI" type="CanvasLayer" parent="."]
-visible = false
+process_mode = 3
 
 [node name="MainMenu" type="Control" parent="GUI"]
 layout_mode = 3
@@ -106,6 +43,30 @@ text = "Start"
 layout_mode = 2
 text = "Quit"
 
-[connection signal="mouse_moved" from="." to="HeatViewport/Pentagram" method="_on_root_mouse_moved"]
-[connection signal="devil_click" from="Devil" to="." method="_on_devil_click"]
-[connection signal="pressed" from="GUI/MainMenu/CenterContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[node name="PauseMenu" type="Control" parent="GUI"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="GUI/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/PauseMenu/CenterContainer"]
+layout_mode = 2
+
+[node name="Resume" type="Button" parent="GUI/PauseMenu/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Resume"
+
+[node name="Quit" type="Button" parent="GUI/PauseMenu/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit to menu"
