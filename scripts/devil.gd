@@ -1,10 +1,11 @@
 class_name Devil
 extends Area2D
 
+@export var max_health: int = 3
 
 var cooldown: float = 0.5
 var click_timer: float = 0.0
-var health: int = 3
+var health: int
 
 
 signal devil_click(position: Vector2)
@@ -13,6 +14,7 @@ signal game_over()
 
 
 func _ready() -> void:
+    health = max_health
     visible = true
 
 
@@ -56,6 +58,9 @@ func damage() -> void:
         $AudioPlayer.volume_db = randf_range(-5, 0)
         $AudioPlayer.play()
 
+
+func get_health() -> float:
+    return max(0.0, float(health) / max_health)
 
 func _on_audio_finished() -> void:
     game_over.emit()

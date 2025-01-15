@@ -3,18 +3,12 @@ extends Node
 
 @onready var game_scene: PackedScene = preload('res://scenes/game.tscn')
 
-enum State {MAIN_MENU, IN_GAME, PAUSE_MENU}
-
-var _state: State = State.MAIN_MENU:
-    set = set_state
-
 var _game: Game = null
 
 
 func _ready() -> void:
     $GUI/MainMenu/CenterContainer/VBoxContainer/Start.connect('pressed', on_start)
     $GUI/MainMenu/CenterContainer/VBoxContainer/Quit.connect('pressed', on_quit)
-
     $GUI/PauseMenu/CenterContainer/VBoxContainer/Resume.connect('pressed', on_resume)
     $GUI/PauseMenu/CenterContainer/VBoxContainer/Quit.connect('pressed', on_quit_to_menu)
 
@@ -50,5 +44,7 @@ func on_quit_to_menu() -> void:
     $GUI/MainMenu.show()
 
 
-func set_state(state: State) -> void:
-    _state = state
+func _on_child_exiting_tree(node: Node) -> void:
+    if node is Game:
+        $GUI/PauseMenu.hide()
+        $GUI/MainMenu.show()

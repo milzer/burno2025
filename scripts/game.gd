@@ -74,10 +74,9 @@ func spawn_priest() -> void:
     $SpawnTimer.one_shot = true
     $SpawnTimer.connect('timeout', spawn_priest, CONNECT_ONE_SHOT)
     $SpawnTimer.start()
-    print('spawned priest ', $SpawnTimer.wait_time)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
     await RenderingServer.frame_post_draw
     heat_image = heat_tex.get_image()
     assert(heat_image, 'Failed to get heat image')
@@ -88,9 +87,10 @@ func _process(_delta: float) -> void:
     var pixel_index: int
     var intensity: int
 
-    # bottom row always burns
+    # bottom row always burns and indicates the devil's health
+    var devil_health_mul = $Devil.get_health()
     for x in range(1, WIDTH - 2):
-        fire_buffer[199 * WIDTH + x] = randi_range(64, 256)
+        fire_buffer[199 * WIDTH + x] = int(randf_range(devil_health_mul * 64, devil_health_mul * 256))
 
     for y in range(HEIGHT - 1):
         for x in range(1, WIDTH - 2):
@@ -111,6 +111,13 @@ func _process(_delta: float) -> void:
     fire_texture.update(fire_image)
 
     $HeatViewport/Pentagram.global_position = get_global_mouse_position()
+
+    # too lazy to add script for the death sprite
+    var death_sprite: Sprite2D = $HeatViewport/DeathSprite
+    if death_sprite.visible:
+        death_sprite.scale += Vector2(delta, delta) * 7
+        death_sprite.global_position.y -= 5.0 * delta
+        death_sprite.modulate.a -= 0.15 * delta
 
 
 func _on_priest_burn_update(event: String, parent: Priest) -> void:
@@ -135,13 +142,19 @@ func _on_devil_click(pos: Vector2) -> void:
                 break
 
 
-func _on_start_pressed() -> void:
-    pass
-
-
 func _on_devil_death() -> void:
-    pass
+    if $SpawnTimer.has_signal('timeout'):
+        $SpawnTimer.disconnect('timeout', spawn_priest)
+
+    for priest in $Priests.get_children():
+        if priest is Priest:
+            priest.devil_killed = true
+            priest.speed *= randf_range(1.1, 1.5)
+
+    $HeatViewport/Pentagram.visible = false
+    $HeatViewport/DeathSprite.visible = true
 
 
 func _on_game_over() -> void:
-    pass
+    $HeatViewport/DeathSprite.visible = false
+    queue_free()

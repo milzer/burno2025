@@ -8,6 +8,7 @@ var target: Vector2
 var speed: int = 100
 var last_distance_to_devil: float
 var burning: bool = false
+var devil_killed: bool = false
 
 
 signal burn_update(event: String, priest: Priest)
@@ -75,6 +76,9 @@ func _process(delta: float) -> void:
 
     if burning:
         burn_update.emit('update', self)
+
+    if devil_killed:
+        target = DEVIL_POSITION + (global_position - DEVIL_POSITION).normalized() * 1000.0
 
 
 func _on_audio_finished() -> void:

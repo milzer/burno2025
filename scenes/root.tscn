@@ -70,3 +70,5 @@ text = "Resume"
 [node name="Quit" type="Button" parent="GUI/PauseMenu/CenterContainer/VBoxContainer"]
 layout_mode = 2
 text = "Quit to menu"
+
+[connection signal="child_exiting_tree" from="." to="." method="_on_child_exiting_tree"]

@@ -41,6 +41,7 @@ script = ExtResource("2_6g27l")
 [node name="DeathSprite" type="Sprite2D" parent="HeatViewport"]
 visible = false
 position = Vector2(160, 192)
+scale = Vector2(1e-05, 1e-05)
 texture = SubResource("AtlasTexture_41vbc")
 
 [node name="Priests" type="Node" parent="."]
@@ -70,4 +71,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[connection signal="death" from="Devil" to="." method="_on_devil_death"]
 [connection signal="devil_click" from="Devil" to="." method="_on_devil_click"]
+[connection signal="game_over" from="Devil" to="." method="_on_game_over"]
